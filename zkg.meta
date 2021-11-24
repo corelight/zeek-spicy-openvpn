@@ -1,7 +1,6 @@
 [package]
-summary = TODO: A summary of OpenVPN in one line
-description = TODO: A more detailed description of OpenVPN.
-	It can span multiple lines, with this indention.
+summary = A Zeek OpenVPN protocol analyzer, based on Spicy.
+description = A Zeek OpenVPN protocol analyzer, based on Spicy.
 script_dir = analyzer
 plugin_dir = build/spicy-modules
 build_command = unset -v CXX CXXFLAGS LD LDFLAGS && mkdir -p build && cd build && cmake .. && cmake --build .

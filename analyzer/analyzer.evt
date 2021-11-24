@@ -1,25 +1,38 @@
-# TODO: Adjust here whether this is a file, tcp or ucp analyzer,
-# and the ports the analyzers work on. See
-# https://docs.zeek.org/projects/spicy/en/latest/zeek.html#interface-definitions-evt-files
-# for the DSL used here. Below, the active analyzer declaration defines a protocol analyzer.
-#
-# A file analyzer would be define like this:
-#
-#     file analyzer spicy::ZIP:
-#         parse with ZIP::Archive,
-#         mime-type application/zip;
-#
-# A packet analyzer would look like this:
-
-#     packet analyzer spicy::RawLayer:
-#         parse with Raw Layer::Packet;
-
-protocol analyzer spicy::OpenVPN over TCP:
-    parse with zeek_spicy_openvpn::OpenVPN,
-    port 8080/tcp;
-
 import zeek_spicy_openvpn;
 import Zeek_zeek_spicy_openvpn;
 
-# TODO: Connect Spicy-side events with Zeek-side events.
-on zeek_spicy_openvpn::OpenVPN -> event OpenVPN::message($conn, $is_orig, self.payload);
+protocol analyzer spicy::OpenVPN_UDP over UDP:
+	parse with zeek_spicy_openvpn::OpenVPNRecords;
+
+protocol analyzer spicy::OpenVPN_UDP_HMAC_MD5 over UDP:
+	parse with zeek_spicy_openvpn::OpenVPNRecordsHMACMD5;
+
+protocol analyzer spicy::OpenVPN_UDP_HMAC_SHA1 over UDP:
+	parse with zeek_spicy_openvpn::OpenVPNRecordsHMACSHA1;
+
+protocol analyzer spicy::OpenVPN_UDP_HMAC_SHA256 over UDP:
+	parse with zeek_spicy_openvpn::OpenVPNRecordsHMACSHA256;
+
+protocol analyzer spicy::OpenVPN_UDP_HMAC_SHA512 over UDP:
+	parse with zeek_spicy_openvpn::OpenVPNRecordsHMACSHA512;
+
+protocol analyzer spicy::OpenVPN_TCP over TCP:
+	parse with zeek_spicy_openvpn::OpenVPNRecordsTCP;
+
+protocol analyzer spicy::OpenVPN_TCP_HMAC_MD5 over TCP:
+	parse with zeek_spicy_openvpn::OpenVPNRecordsTCPHMACMD5;
+
+protocol analyzer spicy::OpenVPN_TCP_HMAC_SHA1 over TCP:
+	parse with zeek_spicy_openvpn::OpenVPNRecordsTCPHMACSHA1;
+
+protocol analyzer spicy::OpenVPN_TCP_HMAC_SHA256 over TCP:
+	parse with zeek_spicy_openvpn::OpenVPNRecordsTCPHMACSHA256;
+
+protocol analyzer spicy::OpenVPN_TCP_HMAC_SHA512 over TCP:
+	parse with zeek_spicy_openvpn::OpenVPNRecordsTCPHMACSHA512;
+
+on zeek_spicy_openvpn::ControlMessage -> event OpenVPN::control_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_controlmsg(self));
+
+on zeek_spicy_openvpn::DataMessage -> event OpenVPN::data_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_datamsg(self));
+
+on zeek_spicy_openvpn::AckMessage -> event OpenVPN::ack_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_ackmsg(self));
