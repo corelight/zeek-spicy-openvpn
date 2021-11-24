@@ -1,0 +1,18 @@
+[package]
+summary = TODO: A summary of OpenVPN in one line
+description = TODO: A more detailed description of OpenVPN.
+	It can span multiple lines, with this indention.
+script_dir = analyzer
+plugin_dir = build/spicy-modules
+build_command = unset -v CXX CXXFLAGS LD LDFLAGS && mkdir -p build && cd build && cmake .. && cmake --build .
+test_command = unset -v CXX CXXFLAGS LD LDFLAGS && cd tests && PATH=$(zkg config plugin_dir)/packages/spicy-plugin/bin:$PATH btest -d -j $(nproc)
+
+[template]
+source = package-template-spicy
+version = master
+zkg_version = 2.12.0
+
+[template_vars]
+namespace = zeek_spicy_openvpn
+name = OpenVPN
+

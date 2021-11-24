@@ -1,0 +1,7 @@
+# @TEST-EXEC: spicyc ${DIST}/analyzer/analyzer.spicy -j -d -o test.hlto
+# @TEST-EXEC: printf "test string" | spicy-dump -p zeek_spicy_openvpn::OpenVPN test.hlto 2>&1 >> output
+# @TEST-EXEC: TEST_DIFF_CANONIFIER= btest-diff output
+#
+# @TEST-DOC: Test parsing behavior of OpenVPN.
+
+# TODO: Add standalone parsing tests here.

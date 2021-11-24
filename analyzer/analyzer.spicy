@@ -1,0 +1,7 @@
+# TODO: Define your analyzers here.
+
+module zeek_spicy_openvpn;
+
+public type OpenVPN = unit {
+    payload: bytes &eod;
+};
