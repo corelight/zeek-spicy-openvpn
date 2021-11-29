@@ -11,7 +11,7 @@ Blogs and webinars detailing the development of this protocol analyzer:
 - <https://event.webinarjam.com/replay/16/405xvaqawfzfqn>
   - Slides: <https://docs.google.com/presentation/d/1ftvMeQ-9hyeozTLXyO_CLVHDLGiwbJk9SqCp8laD1FM/edit?usp=sharing>
 
-## Example Log:
+## Example Log
 
 ```
 #separator \x09
@@ -26,7 +26,7 @@ Blogs and webinars detailing the development of this protocol analyzer:
 #close	2021-11-24-17-01-53
 ```
 
-## Sample PCAPs:
+## Sample PCAPs
 
 - [openvpn-tcp-tls-auth.pcap](https://wiki.wireshark.org/SampleCaptures?action=AttachFile&do=get&target=OpenVPN_TCP_tls-auth.pcapng)
 - openvpn.pcap (self-made)
