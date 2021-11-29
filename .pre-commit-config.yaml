@@ -20,4 +20,4 @@ repos:
   - id: cmake-format
   - id: cmake-lint
 
-exclude: '^tests/Baseline'
+exclude: '^tests/baseline'
