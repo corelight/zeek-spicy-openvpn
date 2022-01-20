@@ -1,6 +1,7 @@
 module zeek_spicy_openvpn;
 
 import spicy;
+import zeek;
 
 %byte-order = spicy::ByteOrder::Big;
 
@@ -18,22 +19,57 @@ type Opcode = enum {
 
 public type OpenVPNRecords = unit {
 	records: OpenVPNRecord(0)[];
+
+	on %init {
+		zeek::protocol_begin("SSL");
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsHMACMD5 = unit {
 	records: OpenVPNRecord(16)[];
+
+	on %init {
+		zeek::protocol_begin("SSL");
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsHMACSHA1 = unit {
 	records: OpenVPNRecord(20)[]; # 160 bit
+
+	on %init {
+		zeek::protocol_begin("SSL");
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsHMACSHA256 = unit {
 	records: OpenVPNRecord(32)[];
+
+	on %init {
+		zeek::protocol_begin("SSL");
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsHMACSHA512 = unit {
 	records: OpenVPNRecord(64)[];
+
+	on %init {
+		zeek::protocol_begin("SSL");
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecord = unit(hmac_size: uint32) {
@@ -97,6 +133,10 @@ public type ControlMessage = unit(opcode: Opcode, key_id: uint8, hmac_size: uint
 	remote_session_id: bytes &size=8 if (self.packet_id_array_len > 0);
 	packet_id: uint32;
 	ssl_data: bytes &eod;
+
+	on %done {
+		zeek::protocol_data_in(zeek::is_orig(), self.ssl_data);
+	}
 };
 
 type AckMessage = unit(opcode: Opcode, key_id: uint8, hmac_size: uint32) {
