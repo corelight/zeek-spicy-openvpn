@@ -1,8 +1,18 @@
 module zeek_spicy_openvpn;
 
 import spicy;
+import zeek;
 
 %byte-order = spicy::ByteOrder::Big;
+
+type Context = tuple<initialized: bool>;
+
+function initialize_connection(inout ctx: Context) {
+	if ( ! ctx.initialized ) {
+		ctx.initialized = True;
+		zeek::protocol_begin("SSL");
+	}
+}
 
 type Opcode = enum {
 	P_CONTROL_HARD_RESET_CLIENT_V1	= 0x01,
@@ -17,23 +27,53 @@ type Opcode = enum {
 };
 
 public type OpenVPNRecords = unit {
+	%context = Context;
+
 	records: OpenVPNRecord(0)[];
+
+	on %init {
+		initialize_connection(self.context());
+	}
 };
 
 public type OpenVPNRecordsHMACMD5 = unit {
+	%context = Context;
+
 	records: OpenVPNRecord(16)[];
+
+	on %init {
+		initialize_connection(self.context());
+	}
 };
 
-public type OpenVPNRecordsHMACSHA1 = unit {
+public type OpenVPNRecordsHMACSHA1 = unit { ##
+	%context = Context;
+
 	records: OpenVPNRecord(20)[]; # 160 bit
+
+	on %init {
+		initialize_connection(self.context());
+	}
 };
 
 public type OpenVPNRecordsHMACSHA256 = unit {
+	%context = Context;
+
 	records: OpenVPNRecord(32)[];
+
+	on %init {
+		initialize_connection(self.context());
+	}
 };
 
 public type OpenVPNRecordsHMACSHA512 = unit {
+	%context = Context;
+
 	records: OpenVPNRecord(64)[];
+
+	on %init {
+		initialize_connection(self.context());
+	}
 };
 
 public type OpenVPNRecord = unit(hmac_size: uint32) {
@@ -56,23 +96,53 @@ public type OpenVPNRecord = unit(hmac_size: uint32) {
 };
 
 public type OpenVPNRecordsTCP = unit {
+	%context = Context;
+
 	records: OpenVPNRecordTCP(0)[];
+
+	on %init {
+		initialize_connection(self.context());
+	}
 };
 
 public type OpenVPNRecordsTCPHMACMD5 = unit {
+	%context = Context;
+
 	records: OpenVPNRecordTCP(16)[];
+
+	on %init {
+		initialize_connection(self.context());
+	}
 };
 
 public type OpenVPNRecordsTCPHMACSHA1 = unit {
+	%context = Context;
+
 	records: OpenVPNRecordTCP(20)[];
+
+	on %init {
+		initialize_connection(self.context());
+	}
 };
 
 public type OpenVPNRecordsTCPHMACSHA256 = unit {
+	%context = Context;
+
 	records: OpenVPNRecordTCP(32)[];
+
+	on %init {
+		initialize_connection(self.context());
+	}
 };
 
 public type OpenVPNRecordsTCPHMACSHA512 = unit {
+	%context = Context;
+
 	records: OpenVPNRecordTCP(64)[];
+
+	on %init {
+		initialize_connection(self.context());
+	}
 };
 
 public type OpenVPNRecordTCP = unit(hmac_size: uint32) {
@@ -97,6 +167,10 @@ public type ControlMessage = unit(opcode: Opcode, key_id: uint8, hmac_size: uint
 	remote_session_id: bytes &size=8 if (self.packet_id_array_len > 0);
 	packet_id: uint32;
 	ssl_data: bytes &eod;
+
+	on %done {
+		zeek::protocol_data_in(zeek::is_orig(), self.ssl_data);
+	}
 };
 
 type AckMessage = unit(opcode: Opcode, key_id: uint8, hmac_size: uint32) {

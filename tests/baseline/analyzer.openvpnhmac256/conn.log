@@ -9,4 +9,4 @@
 #fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	service	duration	orig_bytes	resp_bytes	conn_state	local_orig	local_resp	missed_bytes	history	orig_pkts	orig_ip_bytes	resp_pkts	resp_ip_bytes	tunnel_parents
 #types	time	string	addr	port	addr	port	enum	string	interval	count	count	string	bool	bool	count	string	count	count	count	count	set[string]
 #close XXXX-XX-XX-XX-XX-XX
-XXXXXXXXXX.XXXXXX	CHhAvVGS1DHFjwGM9	192.168.88.5	61984	68.235.38.75	1194	udp	spicy_openvpn_udp_hmac_sha256	12.394935	10452	5407	SF	-	-	0	Dd	73	12496	16	5855	-
+XXXXXXXXXX.XXXXXX	CHhAvVGS1DHFjwGM9	192.168.88.5	61984	68.235.38.75	1194	udp	ssl,spicy_openvpn_udp_hmac_sha256	12.394935	10452	5407	SF	-	-	0	Dd	73	12496	16	5855	-
