@@ -5,6 +5,15 @@ import zeek;
 
 %byte-order = spicy::ByteOrder::Big;
 
+type Context = tuple<initialized: bool>;
+
+function initialize_connection(inout ctx: Context) {
+	if ( ! ctx.initialized ) {
+		ctx.initialized = True;
+		zeek::protocol_begin();
+	}
+}
+
 type Opcode = enum {
 	P_CONTROL_HARD_RESET_CLIENT_V1	= 0x01,
 	P_CONTROL_HARD_RESET_SERVER_V1	= 0x02,
@@ -18,62 +27,52 @@ type Opcode = enum {
 };
 
 public type OpenVPNRecords = unit {
+	%context = Context;
+
 	records: OpenVPNRecord(0)[];
 
 	on %init {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
-	}
-	on %done {
-		zeek::protocol_end();
+		initialize_connection(self.context());
 	}
 };
 
 public type OpenVPNRecordsHMACMD5 = unit {
+	%context = Context;
+
 	records: OpenVPNRecord(16)[];
 
 	on %init {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
-	}
-	on %done {
-		zeek::protocol_end();
+		initialize_connection(self.context());
 	}
 };
 
-public type OpenVPNRecordsHMACSHA1 = unit {
+public type OpenVPNRecordsHMACSHA1 = unit { ##
+	%context = Context;
+
 	records: OpenVPNRecord(20)[]; # 160 bit
 
 	on %init {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
-	}
-	on %done {
-		zeek::protocol_end();
+		initialize_connection(self.context());
 	}
 };
 
 public type OpenVPNRecordsHMACSHA256 = unit {
+	%context = Context;
+
 	records: OpenVPNRecord(32)[];
 
 	on %init {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
-	}
-	on %done {
-		zeek::protocol_end();
+		initialize_connection(self.context());
 	}
 };
 
 public type OpenVPNRecordsHMACSHA512 = unit {
+	%context = Context;
+
 	records: OpenVPNRecord(64)[];
 
 	on %init {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
-	}
-	on %done {
-		zeek::protocol_end();
+		initialize_connection(self.context());
 	}
 };
 
@@ -97,62 +96,52 @@ public type OpenVPNRecord = unit(hmac_size: uint32) {
 };
 
 public type OpenVPNRecordsTCP = unit {
+	%context = Context;
+
 	records: OpenVPNRecordTCP(0)[];
 
 	on %init {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
-	}
-	on %done {
-		zeek::protocol_end();
+		initialize_connection(self.context());
 	}
 };
 
 public type OpenVPNRecordsTCPHMACMD5 = unit {
+	%context = Context;
+
 	records: OpenVPNRecordTCP(16)[];
 
 	on %init {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
-	}
-	on %done {
-		zeek::protocol_end();
+		initialize_connection(self.context());
 	}
 };
 
 public type OpenVPNRecordsTCPHMACSHA1 = unit {
+	%context = Context;
+
 	records: OpenVPNRecordTCP(20)[];
 
 	on %init {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
-	}
-	on %done {
-		zeek::protocol_end();
+		initialize_connection(self.context());
 	}
 };
 
 public type OpenVPNRecordsTCPHMACSHA256 = unit {
+	%context = Context;
+
 	records: OpenVPNRecordTCP(32)[];
 
 	on %init {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
-	}
-	on %done {
-		zeek::protocol_end();
+		initialize_connection(self.context());
 	}
 };
 
 public type OpenVPNRecordsTCPHMACSHA512 = unit {
+	%context = Context;
+
 	records: OpenVPNRecordTCP(64)[];
 
 	on %init {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
-	}
-	on %done {
-		zeek::protocol_end();
+		initialize_connection(self.context());
 	}
 };
 
