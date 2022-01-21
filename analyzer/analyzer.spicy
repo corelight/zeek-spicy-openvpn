@@ -10,7 +10,7 @@ type Context = tuple<initialized: bool>;
 function initialize_connection(inout ctx: Context) {
 	if ( ! ctx.initialized ) {
 		ctx.initialized = True;
-		zeek::protocol_begin();
+		zeek::protocol_begin("SSL");
 	}
 }
 
