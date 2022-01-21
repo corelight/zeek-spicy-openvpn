@@ -19,22 +19,62 @@ type Opcode = enum {
 
 public type OpenVPNRecords = unit {
 	records: OpenVPNRecord(0)[];
+
+	on %init {
+#		zeek::protocol_begin("SSL");
+		zeek::protocol_begin();
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsHMACMD5 = unit {
 	records: OpenVPNRecord(16)[];
+
+	on %init {
+#		zeek::protocol_begin("SSL");
+		zeek::protocol_begin();
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsHMACSHA1 = unit {
 	records: OpenVPNRecord(20)[]; # 160 bit
+
+	on %init {
+#		zeek::protocol_begin("SSL");
+		zeek::protocol_begin();
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsHMACSHA256 = unit {
 	records: OpenVPNRecord(32)[];
+
+	on %init {
+#		zeek::protocol_begin("SSL");
+		zeek::protocol_begin();
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsHMACSHA512 = unit {
 	records: OpenVPNRecord(64)[];
+
+	on %init {
+#		zeek::protocol_begin("SSL");
+		zeek::protocol_begin();
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecord = unit(hmac_size: uint32) {
@@ -58,22 +98,62 @@ public type OpenVPNRecord = unit(hmac_size: uint32) {
 
 public type OpenVPNRecordsTCP = unit {
 	records: OpenVPNRecordTCP(0)[];
+
+	on %init {
+#		zeek::protocol_begin("SSL");
+		zeek::protocol_begin();
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsTCPHMACMD5 = unit {
 	records: OpenVPNRecordTCP(16)[];
+
+	on %init {
+#		zeek::protocol_begin("SSL");
+		zeek::protocol_begin();
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsTCPHMACSHA1 = unit {
 	records: OpenVPNRecordTCP(20)[];
+
+	on %init {
+#		zeek::protocol_begin("SSL");
+		zeek::protocol_begin();
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsTCPHMACSHA256 = unit {
 	records: OpenVPNRecordTCP(32)[];
+
+	on %init {
+#		zeek::protocol_begin("SSL");
+		zeek::protocol_begin();
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordsTCPHMACSHA512 = unit {
 	records: OpenVPNRecordTCP(64)[];
+
+	on %init {
+#		zeek::protocol_begin("SSL");
+		zeek::protocol_begin();
+	}
+	on %done {
+		zeek::protocol_end();
+	}
 };
 
 public type OpenVPNRecordTCP = unit(hmac_size: uint32) {
@@ -100,10 +180,7 @@ public type ControlMessage = unit(opcode: Opcode, key_id: uint8, hmac_size: uint
 	ssl_data: bytes &eod;
 
 	on %done {
-#		zeek::protocol_begin("SSL");
-		zeek::protocol_begin();
 		zeek::protocol_data_in(zeek::is_orig(), self.ssl_data);
-		zeek::protocol_end();
 	}
 };
 
