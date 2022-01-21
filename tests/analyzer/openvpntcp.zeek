@@ -1,6 +1,7 @@
 # @TEST-EXEC: zeek -C -r ${TRACES}/openvpn_tcp_nontlsauth.pcap %INPUT >openvpn.out
 # @TEST-EXEC: btest-diff openvpn.out
 # @TEST-EXEC: btest-diff conn.log
+# @TEST-EXEC: btest-diff ssl.log
 
 @load analyzer
 
