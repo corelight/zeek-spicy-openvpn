@@ -90,7 +90,6 @@ function set_session(c: connection)
 
 event protocol_confirmation(c: connection, atype: Analyzer::Tag, aid: count) &priority=5
 	{
-	set_session(c);
 	if ( atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP ||
 		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_MD5 ||
 		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_SHA1 ||
@@ -102,6 +101,7 @@ event protocol_confirmation(c: connection, atype: Analyzer::Tag, aid: count) &pr
 		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_SHA256 ||
 		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_SHA512 )
 		{
+		set_session(c);
 		c$openvpn$analyzer_id = aid;
 		}
 	}
