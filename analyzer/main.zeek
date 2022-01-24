@@ -59,6 +59,15 @@ export {
 	## is_orig: True if the message was sent by the originator.
 	##
 	## msg: The parsed OpenVPN message.
+	##
+	## ssl_data: The ssl data from the message.
+	global OpenVPN::control_message_with_data: event(c: connection, is_orig: bool, msg: OpenVPN::ControlMsg, ssl_data: string);
+
+	## c: The connection record describing the corresponding UDP flow.
+	##
+	## is_orig: True if the message was sent by the originator.
+	##
+	## msg: The parsed OpenVPN message.
 	global OpenVPN::data_message: event(c: connection, is_orig: bool, msg: OpenVPN::DataMsg);
 
 	## c: The connection record describing the corresponding UDP flow.

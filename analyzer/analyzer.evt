@@ -33,6 +33,8 @@ protocol analyzer spicy::OpenVPN_TCP_HMAC_SHA512 over TCP:
 
 on zeek_spicy_openvpn::ControlMessage -> event OpenVPN::control_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_controlmsg(self));
 
+on zeek_spicy_openvpn::ControlMessage -> event OpenVPN::control_message_with_data($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_controlmsg(self), self.ssl_data);
+
 on zeek_spicy_openvpn::DataMessage -> event OpenVPN::data_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_datamsg(self));
 
 on zeek_spicy_openvpn::AckMessage -> event OpenVPN::ack_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_ackmsg(self));
