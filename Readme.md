@@ -14,7 +14,7 @@ Blogs and webinars detailing the development of this protocol analyzer:
 ## Example Log
 
 ```
-$ cat conn.log 
+$ cat conn.log
 #separator \x09
 #set_separator	,
 #empty_field	(empty)
@@ -26,7 +26,7 @@ $ cat conn.log
 1613755368.960989	CyO1lb37w2czkxBsPd	192.168.88.3	50568	46.246.122.61	1198	udp	ssl,spicy_openvpn_udp	44.271572	5825	8524	SF	-	-	0	Dd	57	7421	48	9868	-
 #close	2022-01-21-11-46-35
 
-$ cat ssl.log 
+$ cat ssl.log
 #separator \x09
 #set_separator	,
 #empty_field	(empty)
