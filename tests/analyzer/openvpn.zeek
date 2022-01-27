@@ -5,8 +5,8 @@
 
 @load analyzer
 
-redef OpenVPN::disable_analyzer_after_detection = F;
+redef OpenVPN_2::disable_analyzer_after_detection = F;
 
-event OpenVPN::control_message(c: connection, is_orig: bool, msg: OpenVPN::ControlMsg) { print cat(msg); }
-event OpenVPN::ack_message(c: connection, is_orig: bool, msg: OpenVPN::AckMsg) { print cat(msg); }
-event OpenVPN::data_message(c: connection, is_orig: bool, msg: OpenVPN::DataMsg) { print cat(msg); }
+event OpenVPN_2::control_message(c: connection, is_orig: bool, msg: OpenVPN_2::ControlMsg) { print cat(msg); }
+event OpenVPN_2::ack_message(c: connection, is_orig: bool, msg: OpenVPN_2::AckMsg) { print cat(msg); }
+event OpenVPN_2::data_message(c: connection, is_orig: bool, msg: OpenVPN_2::DataMsg) { print cat(msg); }

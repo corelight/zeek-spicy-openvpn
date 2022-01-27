@@ -1,40 +1,40 @@
 import zeek_spicy_openvpn;
 import Zeek_zeek_spicy_openvpn;
 
-protocol analyzer spicy::OpenVPN_UDP over UDP:
+protocol analyzer spicy::OpenVPN_UDP_2 over UDP:
 	parse with zeek_spicy_openvpn::OpenVPNRecords;
 
-protocol analyzer spicy::OpenVPN_UDP_HMAC_MD5 over UDP:
+protocol analyzer spicy::OpenVPN_UDP_HMAC_MD5_2 over UDP:
 	parse with zeek_spicy_openvpn::OpenVPNRecordsHMACMD5;
 
-protocol analyzer spicy::OpenVPN_UDP_HMAC_SHA1 over UDP:
+protocol analyzer spicy::OpenVPN_UDP_HMAC_SHA1_2 over UDP:
 	parse with zeek_spicy_openvpn::OpenVPNRecordsHMACSHA1;
 
-protocol analyzer spicy::OpenVPN_UDP_HMAC_SHA256 over UDP:
+protocol analyzer spicy::OpenVPN_UDP_HMAC_SHA256_2 over UDP:
 	parse with zeek_spicy_openvpn::OpenVPNRecordsHMACSHA256;
 
-protocol analyzer spicy::OpenVPN_UDP_HMAC_SHA512 over UDP:
+protocol analyzer spicy::OpenVPN_UDP_HMAC_SHA512_2 over UDP:
 	parse with zeek_spicy_openvpn::OpenVPNRecordsHMACSHA512;
 
-protocol analyzer spicy::OpenVPN_TCP over TCP:
+protocol analyzer spicy::OpenVPN_TCP_2 over TCP:
 	parse with zeek_spicy_openvpn::OpenVPNRecordsTCP;
 
-protocol analyzer spicy::OpenVPN_TCP_HMAC_MD5 over TCP:
+protocol analyzer spicy::OpenVPN_TCP_HMAC_MD5_2 over TCP:
 	parse with zeek_spicy_openvpn::OpenVPNRecordsTCPHMACMD5;
 
-protocol analyzer spicy::OpenVPN_TCP_HMAC_SHA1 over TCP:
+protocol analyzer spicy::OpenVPN_TCP_HMAC_SHA1_2 over TCP:
 	parse with zeek_spicy_openvpn::OpenVPNRecordsTCPHMACSHA1;
 
-protocol analyzer spicy::OpenVPN_TCP_HMAC_SHA256 over TCP:
+protocol analyzer spicy::OpenVPN_TCP_HMAC_SHA256_2 over TCP:
 	parse with zeek_spicy_openvpn::OpenVPNRecordsTCPHMACSHA256;
 
-protocol analyzer spicy::OpenVPN_TCP_HMAC_SHA512 over TCP:
+protocol analyzer spicy::OpenVPN_TCP_HMAC_SHA512_2 over TCP:
 	parse with zeek_spicy_openvpn::OpenVPNRecordsTCPHMACSHA512;
 
-on zeek_spicy_openvpn::ControlMessage -> event OpenVPN::control_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_controlmsg(self));
+on zeek_spicy_openvpn::ControlMessage -> event OpenVPN_2::control_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_controlmsg(self));
 
-on zeek_spicy_openvpn::ControlMessage -> event OpenVPN::control_message_with_data($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_controlmsg(self), self.ssl_data);
+on zeek_spicy_openvpn::ControlMessage -> event OpenVPN_2::control_message_with_data($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_controlmsg(self), self.ssl_data);
 
-on zeek_spicy_openvpn::DataMessage -> event OpenVPN::data_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_datamsg(self));
+on zeek_spicy_openvpn::DataMessage -> event OpenVPN_2::data_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_datamsg(self));
 
-on zeek_spicy_openvpn::AckMessage -> event OpenVPN::ack_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_ackmsg(self));
+on zeek_spicy_openvpn::AckMessage -> event OpenVPN_2::ack_message($conn, $is_orig, Zeek_zeek_spicy_openvpn::create_ackmsg(self));

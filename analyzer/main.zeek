@@ -1,4 +1,4 @@
-module OpenVPN;
+module OpenVPN_2;
 
 export {
 	## Set to true to disable the analyzer after the protocol is confirmed.
@@ -52,7 +52,7 @@ export {
 	## is_orig: True if the message was sent by the originator.
 	##
 	## msg: The parsed OpenVPN message.
-	global OpenVPN::control_message: event(c: connection, is_orig: bool, msg: OpenVPN::ControlMsg);
+	global OpenVPN_2::control_message: event(c: connection, is_orig: bool, msg: OpenVPN_2::ControlMsg);
 
 	## c: The connection record describing the corresponding UDP flow.
 	##
@@ -61,21 +61,21 @@ export {
 	## msg: The parsed OpenVPN message.
 	##
 	## ssl_data: The ssl data from the message.
-	global OpenVPN::control_message_with_data: event(c: connection, is_orig: bool, msg: OpenVPN::ControlMsg, ssl_data: string);
+	global OpenVPN_2::control_message_with_data: event(c: connection, is_orig: bool, msg: OpenVPN_2::ControlMsg, ssl_data: string);
 
 	## c: The connection record describing the corresponding UDP flow.
 	##
 	## is_orig: True if the message was sent by the originator.
 	##
 	## msg: The parsed OpenVPN message.
-	global OpenVPN::data_message: event(c: connection, is_orig: bool, msg: OpenVPN::DataMsg);
+	global OpenVPN_2::data_message: event(c: connection, is_orig: bool, msg: OpenVPN_2::DataMsg);
 
 	## c: The connection record describing the corresponding UDP flow.
 	##
 	## is_orig: True if the message was sent by the originator.
 	##
 	## msg: The parsed OpenVPN message.
-	global OpenVPN::ack_message: event(c: connection, is_orig: bool, msg: OpenVPN::AckMsg);
+	global OpenVPN_2::ack_message: event(c: connection, is_orig: bool, msg: OpenVPN_2::AckMsg);
 
 	## The record type which contains OpenVPN info.
 	type Info: record {
@@ -88,38 +88,38 @@ export {
 }
 
 redef record connection += {
-	openvpn: Info &optional;
+	openvpn_2: Info &optional;
 };
 
 function set_session(c: connection)
 	{
-	if ( ! c?$openvpn )
-		c$openvpn = [];
+	if ( ! c?$openvpn_2 )
+		c$openvpn_2 = [];
 	}
 
 event protocol_confirmation(c: connection, atype: Analyzer::Tag, aid: count) &priority=5
 	{
-	if ( atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP ||
-		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_MD5 ||
-		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_SHA1 ||
-		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_SHA256 ||
-		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_SHA512 ||
-		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP ||
-		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_MD5 ||
-		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_SHA1 ||
-		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_SHA256 ||
-		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_SHA512 )
+	if ( atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_2 ||
+		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_MD5_2 ||
+		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_SHA1_2 ||
+		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_SHA256_2 ||
+		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_SHA512_2 ||
+		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_2 ||
+		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_MD5_2 ||
+		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_SHA1_2 ||
+		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_SHA256_2 ||
+		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_SHA512_2 )
 		{
 		set_session(c);
-		c$openvpn$analyzer_id = aid;
+		c$openvpn_2$analyzer_id = aid;
 		}
 	}
 
-event OpenVPN::data_message(c: connection, is_orig: bool, msg: OpenVPN::DataMsg)
+event OpenVPN_2::data_message(c: connection, is_orig: bool, msg: OpenVPN_2::DataMsg)
 	{
-	if (disable_analyzer_after_detection == T && c?$openvpn && c$openvpn?$analyzer_id)
+	if (disable_analyzer_after_detection == T && c?$openvpn_2 && c$openvpn_2?$analyzer_id)
 		{
-		disable_analyzer(c$id, c$openvpn$analyzer_id);
-		delete c$openvpn$analyzer_id;
+		disable_analyzer(c$id, c$openvpn_2$analyzer_id);
+		delete c$openvpn_2$analyzer_id;
 		}
 	}
