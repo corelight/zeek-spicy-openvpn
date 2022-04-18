@@ -3,6 +3,13 @@ module Zeek_zeek_spicy_openvpn;
 import zeek_spicy_openvpn;
 import zeek;
 
+function initialize_connection(inout ctx: zeek_spicy_openvpn::Context) {
+	if ( ! ctx.initialized ) {
+		ctx.initialized = True;
+		zeek::protocol_begin("SSL");
+	}
+}
+
 on zeek_spicy_openvpn::ControlMessage::%done {
 	if ((self.opcode == zeek_spicy_openvpn::Opcode::P_CONTROL_HARD_RESET_CLIENT_V1 ||
 		 self.opcode == zeek_spicy_openvpn::Opcode::P_CONTROL_HARD_RESET_SERVER_V2 ||
@@ -20,6 +27,50 @@ on zeek_spicy_openvpn::OpenVPNRecord::%error {
 
 on zeek_spicy_openvpn::OpenVPNRecordTCP::%error {
 	zeek::reject_protocol("error while parsing OpenVPN record");
+}
+
+on zeek_spicy_openvpn::ControlMessage::%done {
+    zeek::protocol_data_in(zeek::is_orig(), self.ssl_data);
+}
+
+on zeek_spicy_openvpn::OpenVPNRecords::%init {
+    initialize_connection(self.context());
+}
+
+on zeek_spicy_openvpn::OpenVPNRecordsHMACMD5::%init {
+    initialize_connection(self.context());
+}
+
+on zeek_spicy_openvpn::OpenVPNRecordsHMACSHA1::%init {
+    initialize_connection(self.context());
+}
+
+on zeek_spicy_openvpn::OpenVPNRecordsHMACSHA256::%init {
+    initialize_connection(self.context());
+}
+
+on zeek_spicy_openvpn::OpenVPNRecordsHMACSHA512::%init {
+    initialize_connection(self.context());
+}
+
+on zeek_spicy_openvpn::OpenVPNRecordsTCP::%init {
+    initialize_connection(self.context());
+}
+
+on zeek_spicy_openvpn::OpenVPNRecordsTCPHMACMD5::%init {
+    initialize_connection(self.context());
+}
+
+on zeek_spicy_openvpn::OpenVPNRecordsTCPHMACSHA1::%init {
+    initialize_connection(self.context());
+}
+
+on zeek_spicy_openvpn::OpenVPNRecordsTCPHMACSHA256::%init {
+    initialize_connection(self.context());
+}
+
+on zeek_spicy_openvpn::OpenVPNRecordsTCPHMACSHA512::%init {
+    initialize_connection(self.context());
 }
 
 public function create_controlmsg(msg: zeek_spicy_openvpn::ControlMessage):
