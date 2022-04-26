@@ -97,7 +97,7 @@ function set_session(c: connection)
 		c$openvpn = [];
 	}
 
-event protocol_confirmation(c: connection, atype: Analyzer::Tag, aid: count) &priority=5
+event analyzer_confirmation(c: connection, atype: Analyzer::Tag, aid: count) &priority=5
 	{
 	if ( atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP ||
 		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_UDP_HMAC_MD5 ||
