@@ -2,6 +2,7 @@ build
 .idea/
 cmake-build-debug/
 .DS_Store
+._.DS_Store
 *.swp
 *.tmp
 tests/.btest*
