@@ -97,7 +97,7 @@ function set_session(c: connection)
 		c$openvpn_2 = [];
 	}
 
-@if (version::at_least("6.0.0"))
+@if (Version::at_least("6.0.0"))
 event analyzer_confirmation_info(atype: AllAnalyzers::Tag, info: AnalyzerConfirmationInfo) &priority=5
 @else
 event analyzer_confirmation(c: connection, atype: Analyzer::Tag, aid: count) &priority=5
@@ -114,7 +114,7 @@ event analyzer_confirmation(c: connection, atype: Analyzer::Tag, aid: count) &pr
 		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_SHA256_2 ||
 		 atype == Analyzer::ANALYZER_SPICY_OPENVPN_TCP_HMAC_SHA512_2 )
 		{
-@if (version::at_least("6.0.0"))
+@if (Version::at_least("6.0.0"))
 		set_session(info$c);
 		info$c$openvpn$analyzer_id = info$aid;
 @else
