@@ -1,6 +1,7 @@
 # @TEST-EXEC: zeek -C -r ${TRACES}/openvpn_udp_hmac_256.pcap %INPUT >openvpn.out
+# @TEST-EXEC: cat conn.log | zeek-cut -m -n local_orig local_resp >conn.log.filtered
 # @TEST-EXEC: btest-diff openvpn.out
-# @TEST-EXEC: btest-diff conn.log
+# @TEST-EXEC: btest-diff conn.log.filtered
 # @TEST-EXEC: btest-diff ssl.log
 
 @load analyzer
