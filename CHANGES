@@ -1,5 +1,6 @@
-v0.1.7      Make tests Zeek v6 ready.
+v0.1.8		Make tests v7.1 ready.
+v0.1.7      	Make tests Zeek v6 ready.
 v0.1.6		Make Zeek v6 ready.	
 v0.1.5		Make Zeek v5 ready.	
-v0.1.4      Changed protocol_confirmation to analyzer_confirmation for Zeek v5.
+v0.1.4      	Changed protocol_confirmation to analyzer_confirmation for Zeek v5.
 v0.1.3     	Provided a new event with access to the SSL data.
