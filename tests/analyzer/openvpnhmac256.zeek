@@ -1,5 +1,5 @@
 # @TEST-EXEC: zeek -C -r ${TRACES}/openvpn_udp_hmac_256.pcap %INPUT >openvpn.out
-# @TEST-EXEC: grep spicy_openvpn_udp_hmac_sha256 conn.log > service.txt
+# @TEST-EXEC: grep -o spicy_openvpn_udp_hmac_sha256 conn.log > service.txt
 # @TEST-EXEC: zeek-cut -m -n local_orig local_resp ip_proto service < conn.log > conn.log.filtered
 # @TEST-EXEC: btest-diff openvpn.out
 # @TEST-EXEC: btest-diff conn.log.filtered
