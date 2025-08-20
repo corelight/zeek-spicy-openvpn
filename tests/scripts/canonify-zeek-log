@@ -1,0 +1,7 @@
+#! /usr/bin/env bash
+#
+# Remove unstable pieces in Zeek logs.
+
+sed -E 's/^ *#(open|close).(19|20)..-..-..-..-..-..$/#\1 XXXX-XX-XX-XX-XX-XX/g' |
+    $(dirname $0)/diff-remove-timestamps |
+    $(dirname $0)/diff-remove-abspath
