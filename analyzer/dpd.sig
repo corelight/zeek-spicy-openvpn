@@ -51,7 +51,9 @@ signature dpd_openvpnhmacsha256_udp_server {
 # and its encrypted payload leaves no distinguishable pattern for DPD.
 signature dpd_openvpnhmacsha256_tlscrypt_v2_udp_client {
   ip-proto == udp
-  payload /^\x50/
+  # opcode (1) + session_id (8) + replay_packet_id (4) then net_time upper byte >= 0x38 (>= year 2000)
+  payload /^\x50.{12}[\x38-\xff]/
+  payload-size > 290
 }
 
 signature dpd_openvpnhmacsha256_tlscrypt_v2_udp_server {
@@ -124,7 +126,9 @@ signature dpd_openvpnhmacsha256_tcp_server {
 # TLS-crypt-v2 only: see UDP equivalent for explanation.
 signature dpd_openvpnhmacsha256_tlscrypt_v2_tcp_client {
   ip-proto == tcp
-  payload /^..\x50/
+  # 2-byte tcp length prefix, then same offsets as udp variant
+  payload /^..\x50.{12}[\x38-\xff]/
+  payload-size > 290
 }
 
 signature dpd_openvpnhmacsha256_tlscrypt_v2_tcp_server {
