@@ -46,6 +46,23 @@ signature dpd_openvpnhmacsha256_udp_server {
   enable "spicy_OpenVPN_UDP_HMAC_SHA256"
 }
 
+# TLS-crypt-v2 only: P_CONTROL_HARD_RESET_CLIENT_V3 (opcode 10, 0x50) is unique to v2.
+# TLS-crypt-v1 cannot be reliably detected: it shares opcode 7 (0x38) with other modes
+# and its encrypted payload leaves no distinguishable pattern for DPD.
+signature dpd_openvpnhmacsha256_tlscrypt_v2_udp_client {
+  ip-proto == udp
+  # opcode (1) + session_id (8) + replay_packet_id (4) then net_time upper byte >= 0x38 (>= year 2000)
+  payload /^\x50.{12}[\x38-\xff]/
+  payload-size > 290
+}
+
+signature dpd_openvpnhmacsha256_tlscrypt_v2_udp_server {
+  ip-proto == udp
+  payload /^\x40/
+  requires-reverse-signature dpd_openvpnhmacsha256_tlscrypt_v2_udp_client
+  enable "spicy_OpenVPN_UDP_HMAC_SHA256"
+}
+
 signature dpd_openvpnhmacsha512_udp_client {
   ip-proto == udp
   payload /^\x38.{80}\x00\x00\x00\x00\x00/
@@ -103,6 +120,21 @@ signature dpd_openvpnhmacsha256_tcp_server {
   ip-proto == tcp
   payload /^..\x40/
   requires-reverse-signature dpd_openvpnhmacsha256_tcp_client
+  enable "spicy_OpenVPN_TCP_HMAC_SHA256"
+}
+
+# TLS-crypt-v2 only: see UDP equivalent for explanation.
+signature dpd_openvpnhmacsha256_tlscrypt_v2_tcp_client {
+  ip-proto == tcp
+  # 2-byte tcp length prefix, then same offsets as udp variant
+  payload /^..\x50.{12}[\x38-\xff]/
+  payload-size > 290
+}
+
+signature dpd_openvpnhmacsha256_tlscrypt_v2_tcp_server {
+  ip-proto == tcp
+  payload /^..\x40/
+  requires-reverse-signature dpd_openvpnhmacsha256_tlscrypt_v2_tcp_client
   enable "spicy_OpenVPN_TCP_HMAC_SHA256"
 }
 

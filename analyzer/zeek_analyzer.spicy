@@ -12,12 +12,24 @@ function initialize_connection(inout ctx: zeek_spicy_openvpn::Context) {
 
 on zeek_spicy_openvpn::ControlMessage::%done {
 	if ((self.opcode == zeek_spicy_openvpn::Opcode::P_CONTROL_HARD_RESET_CLIENT_V1 ||
-		 self.opcode == zeek_spicy_openvpn::Opcode::P_CONTROL_HARD_RESET_SERVER_V2 ||
+		 self.opcode == zeek_spicy_openvpn::Opcode::P_CONTROL_HARD_RESET_SERVER_V1 ||
 		 self.opcode == zeek_spicy_openvpn::Opcode::P_CONTROL_SOFT_RESET_V1 ||
 		 self.opcode == zeek_spicy_openvpn::Opcode::P_CONTROL_HARD_RESET_CLIENT_V2 ||
-		 self.opcode == zeek_spicy_openvpn::Opcode::P_CONTROL_HARD_RESET_SERVER_V2)
+		 self.opcode == zeek_spicy_openvpn::Opcode::P_CONTROL_HARD_RESET_SERVER_V2 )
 	     && |self.ssl_data| > 0)
 		zeek::reject_protocol("should not have ssl_data.");
+	zeek::confirm_protocol();
+}
+
+on zeek_spicy_openvpn::ControlMessageTlsCryptInit::%done {
+	zeek::confirm_protocol();
+}
+
+on zeek_spicy_openvpn::ControlMessageTlsCrypt::%done {
+	zeek::confirm_protocol();
+}
+
+on zeek_spicy_openvpn::AckMessageTlsCrypt::%done {
 	zeek::confirm_protocol();
 }
 
@@ -100,6 +112,52 @@ public function create_controlmsg(msg: zeek_spicy_openvpn::ControlMessage):
     );
 }
 
+public function create_controlmsg(msg: zeek_spicy_openvpn::ControlMessageTlsCryptInit):
+    tuple<
+        opcode: uint8,
+        key_id: uint8,
+        session_id: optional<bytes>,
+        packet_id_ack_array: optional<vector<uint32>>,
+        remote_session_id: optional<bytes>,
+        packet_id: optional<uint32>,
+        data_len: uint64> {
+    local no_acks: optional<vector<uint32>>;
+    local no_remote_session: optional<bytes>;
+    local no_packet_id: optional<uint32>;
+    return (
+        cast<uint8>(msg.opcode),
+        msg.key_id,
+        msg.session_id,
+        no_acks,
+        no_remote_session,
+        no_packet_id,
+        |msg.data|
+    );
+}
+
+public function create_controlmsg(msg: zeek_spicy_openvpn::ControlMessageTlsCrypt):
+    tuple<
+        opcode: uint8,
+        key_id: uint8,
+        session_id: optional<bytes>,
+        packet_id_ack_array: optional<vector<uint32>>,
+        remote_session_id: optional<bytes>,
+        packet_id: optional<uint32>,
+        data_len: uint64> {
+    local no_acks: optional<vector<uint32>>;
+    local no_remote_session: optional<bytes>;
+    local no_packet_id: optional<uint32>;
+    return (
+        cast<uint8>(msg.opcode),
+        msg.key_id,
+        msg.session_id,
+        no_acks,
+        no_remote_session,
+        no_packet_id,
+        |msg.data|
+    );
+}
+
 public function create_ackmsg(msg: zeek_spicy_openvpn::AckMessage):
     tuple<
         opcode: uint8,
@@ -107,12 +165,37 @@ public function create_ackmsg(msg: zeek_spicy_openvpn::AckMessage):
         session_id: optional<bytes>,
         packet_id_ack_array: optional<vector<uint32>>,
         remote_session_id: optional<bytes>> {
+	local rs: optional<bytes>;
+	local acks: optional<vector<uint32>>;
+	if (msg.packet_id_array_len > 0)
+		{
+		rs = msg.remote_session_id;
+		acks = msg.packet_id_array;
+		}
     return (
         cast<uint8>(msg.opcode),
         msg.key_id,
         msg.session_id,
-        msg.packet_id_array,
-        msg.remote_session_id
+        acks,
+        rs
+    );
+}
+
+public function create_ackmsg(msg: zeek_spicy_openvpn::AckMessageTlsCrypt):
+    tuple<
+        opcode: uint8,
+        key_id: uint8,
+        session_id: optional<bytes>,
+        packet_id_ack_array: optional<vector<uint32>>,
+        remote_session_id: optional<bytes>> {
+    local no_acks: optional<vector<uint32>>;
+    local no_remote_session: optional<bytes>;
+    return (
+        cast<uint8>(msg.opcode),
+        msg.key_id,
+        msg.session_id,
+        no_acks,
+        no_remote_session
     );
 }
 
